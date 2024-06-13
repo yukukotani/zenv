@@ -48,6 +48,7 @@ jobs:
         env:
           GOOS: ${{ github.env.goos }}
           GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 1
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
