@@ -1,27 +1,36 @@
 on:
   push:
     branches:
-      - macos
+      - macos-2
 
 permissions:
   contents: write
   packages: write
 
 jobs:
-  releases-matrix:
-    name: Release Go Binary
+  releases-linux:
+    name: Release Go Binary for Linux
     runs-on: ubuntu-latest
-    env:
-      CGO_ENABLED: 1
     strategy:
       matrix:
-        # keychain library is required for building darwin binary, however it's not available in ubuntu. Then we build only linux binary here.
-        goos: [linux]
         goarch: [amd64, arm64]
     steps:
       - uses: actions/checkout@v4
       - uses: wangyoucao577/go-release-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          goos: ${{ matrix.goos }}
+          goos: linux
+          goarch: ${{ matrix.goarch }}
+  releases-macos:
+    name: Release Go Binary for MacOS
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        goarch: [amd64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: wangyoucao577/go-release-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: darwin
           goarch: ${{ matrix.goarch }}
