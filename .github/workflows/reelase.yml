@@ -21,14 +21,16 @@ jobs:
         with:
           go-version: "stable"
       - name: Build
-        run: go build -o zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}
+        run: go build
         env:
           GOOS: ${{ env.goos }}
           GOARCH: ${{ matrix.goarch }}
+      - name: Compress
+        run: tar -zcvf zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}.tar.gz zenv
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}
+          asset_path: zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}.tar.gz
 
   releases-macos:
     name: Release Go Binary for MacOS
@@ -44,12 +46,14 @@ jobs:
         with:
           go-version: "stable"
       - name: Build
-        run: go build -o zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}
+        run: go build
         env:
           GOOS: ${{ env.goos }}
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: 1
+      - name: Compress
+        run: tar -zcvf zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}.tar.gz zenv
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}
+          asset_path: zenv-${{ github.event.release.tag_name }}-${{ env.goos }}-${{ matrix.goarch }}.tar.gz
